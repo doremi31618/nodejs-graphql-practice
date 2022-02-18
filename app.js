@@ -7,6 +7,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+
+
 var app = express();
 
 // view engine setup
@@ -21,6 +23,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+//=========================GraphQL Syntax start======================================
+//import require package
+const path = require('path');
+const {buildSchema} = require('graphql');
+const {graphqlHTTP } = require('express-graphql'); 
+const {makeExecutableSchema} = require('@graphql-tools/schema');
+const {loadFileSync} = require('@graphql-tools/load-files');
+
+const typesArray = loadFileSync(path.join(__dirname, '**/**/*.graphql'));
+const resolversArray = loadFileSync(path.join(__dirname, '**/**/*.resolver.js'));
+const schema = makeExecutableSchema({
+  typeDefs: typesArray,
+  resolvers: resolversArray,
+});
+
+const root = {
+  products: require('./modele/products/products.model'),
+  orders: require('./model/orders/orders.model')
+};
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
+
+//=========================GraphQL Syntax end======================================
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,5 +68,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(5000, ()=>{
+  console.log('Running GraphQL Server')
+})
 
 module.exports = app;
