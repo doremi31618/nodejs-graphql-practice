@@ -7,6 +7,7 @@
     "devstart": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@graphql-tools/load-files": "^6.5.3",
     "@graphql-tools/schema": "^8.3.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

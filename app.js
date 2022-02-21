@@ -26,22 +26,20 @@ app.use('/users', usersRouter);
 
 //=========================GraphQL Syntax start======================================
 //import require package
-const path = require('path');
-const {buildSchema} = require('graphql');
 const {graphqlHTTP } = require('express-graphql'); 
 const {makeExecutableSchema} = require('@graphql-tools/schema');
-const {loadFileSync} = require('@graphql-tools/load-files');
+const {loadFilesSync} = require('@graphql-tools/load-files');
 
-const typesArray = loadFileSync(path.join(__dirname, '**/**/*.graphql'));
-const resolversArray = loadFileSync(path.join(__dirname, '**/**/*.resolver.js'));
+const typesArray = loadFilesSync(path.join(__dirname, './models/**/*.graphql'));
+const resolversArray = loadFilesSync(path.join(__dirname, './models/**/*.resolver.js'));
 const schema = makeExecutableSchema({
   typeDefs: typesArray,
   resolvers: resolversArray,
 });
 
 const root = {
-  products: require('./modele/products/products.model'),
-  orders: require('./model/orders/orders.model')
+  products: require('./models/products/products.model'),
+  orders: require('./models/orders/orders.model')
 };
 
 app.use('/graphql', graphqlHTTP({

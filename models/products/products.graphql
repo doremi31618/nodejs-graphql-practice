@@ -1,12 +1,17 @@
-
+# description for graphql
 type Query {
     products: [Product]
 }
 
+
+"""A prototype that a product would have"""
 type Product {
+    """poduct id"""
     id: ID!
+    """product name"""
     description: String!
-    reviews: [Reivew]
+    """product review"""
+    reviews: [Review]
     price: Float!
 }
 
